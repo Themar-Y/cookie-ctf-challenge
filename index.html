@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thelma's Chocolate Cookie Quest</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Thelma's Chocolate Cookie Quest</h1>
+        <p id="cookie-status">
+            You currently have a <strong><span id="cookie-type">vanilla</span> cookie</strong>.  
+            Thelma loves chocolate cookies! Can you change the cookie value to "chocolate" and unlock the secret flag?
+        </p>
+        <div id="flag" class="hidden">
+            <p>Congrats! The flag is: <strong>CYA{chocolate_cookie_is_the_flag}</strong></p>
+        </div>
+        <p class="note">Tip: Use your browser's developer tools to change the cookie value!</p>
+        
+    </div>
+
+    <script>
+        // Function to set a cookie
+        function setCookie(name, value, days) {
+            let d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+            console.log("Cookie set: " + name + "=" + value);  // Log when cookie is set
+        }
+
+        // Function to get a cookie by name
+        function getCookie(name) {
+            let nameEQ = name + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Function to check the current cookie value and update the page
+        function checkCookie() {
+            let cookieValue = getCookie("cookie_type");
+
+            // If no cookie is set, set the cookie to 'vanilla'
+            if (cookieValue === null) {
+                setCookie("cookie_type", "vanilla", 1); // Set default to vanilla for 1 day
+                cookieValue = "vanilla";
+            }
+
+            // Log the cookie value to ensure it's being read correctly
+            console.log("Cookie value: " + cookieValue);
+
+            // Update the page based on the cookie value
+            document.getElementById("cookie-type").innerText = cookieValue;
+
+            // If cookie is 'chocolate', show the flag
+            if (cookieValue === 'chocolate') {
+                document.getElementById('cookie-status').innerHTML = 'You now have a <strong><span id="cookie-type">chocolate</span> cookie</strong>!';
+                document.getElementById('flag').classList.remove('hidden');
+            }
+        }
+
+        // Check cookie on page load
+        window.onload = checkCookie;
+    </script>
+</body>
+</html>
+
+
+
+
